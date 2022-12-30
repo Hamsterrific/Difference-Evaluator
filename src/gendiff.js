@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import _ from 'lodash';
-import path from 'path';git
+import path from 'path';
 
 const getAbsolutePath = (filepath) => path.resolve(process.cwd(), filepath);
 
