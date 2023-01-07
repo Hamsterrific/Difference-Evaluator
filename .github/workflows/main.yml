@@ -1,10 +1,10 @@
-name: gendiff
-on: [push]
+name: linter + tests
+on: push
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1 
         with: 
@@ -12,7 +12,7 @@ jobs:
       - run: make install
       - run: make lint
       - run: make test
-     - name: Test & publish code coverage
+      - name: Test & publish code coverage
       # Publish code coverage on Code Climate
       # https://github.com/paambaati/codeclimate-action
       uses: paambaati/codeclimate-action@v3.0.0
