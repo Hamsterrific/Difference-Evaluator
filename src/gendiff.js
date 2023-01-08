@@ -1,8 +1,11 @@
-import { readFileSync } from 'node:fs';
+import { read, readFileSync } from 'node:fs';
 import _ from 'lodash';
+import parse from './parsers.js';
 import path from 'path';
 
-const getAbsolutePath = (filepath) => path.resolve(process.cwd(), filepath);
+const getFilepath = (file) => path.resolve(process.cwd(), file);
+const getFormat = (filepath) => path.extname(filepath);
+const readFile = (filepath) => readFileSync(getFilepath(filepath));
 
 const ast = (file1, file2) => {
   const entries1 = Object.entries(file1);
@@ -23,8 +26,8 @@ const ast = (file1, file2) => {
   return result;
 };
 
-const jsonify = (obj) => {
-  const entries = Object.entries(obj);
+const formatData = (data) => {
+  const entries = Object.entries(data);
   /* eslint-disable no-param-reassign */
   const result = entries.reduce((acc, [key, desc]) => {
     const { type, value } = desc;
@@ -41,17 +44,15 @@ const jsonify = (obj) => {
     return acc;
   }, '');
   /* eslint-enable no-param-reassign */
-  return result;
+  return '{\n' + result + '}';
 };
 
-const genDiff = (json1, json2) => {
-  const filepath1 = getAbsolutePath(json1);
-  const filepath2 = getAbsolutePath(json2);
-  const file1 = readFileSync(filepath1);
-  const file2 = readFileSync(filepath2);
-  const file1Parsed = JSON.parse(file1);
-  const file2Parsed = JSON.parse(file2);
+const genDiff = (data1, data2) => {
+  const file1 = readFile(data1);
+  const file2 = readFile(data2);
+  const file1Parsed = parse(file1, getFormat(data1));
+  const file2Parsed = parse(file2, getFormat(data2));
   const nodeTypes = ast(file1Parsed, file2Parsed);
-  return jsonify(nodeTypes);
+  return formatData(nodeTypes);
 };
 export default genDiff;
