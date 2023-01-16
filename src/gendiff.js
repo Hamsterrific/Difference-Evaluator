@@ -1,65 +1,43 @@
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import path from 'path';
 import _ from 'lodash';
 import parse from './parsers.js';
+import getFormat from './formatters/index.js';
 
-const getFilepath = (file) => path.resolve(process.cwd(), file);
-const getFormat = (filepath) => path.extname(filepath);
+const getFilepath = (filepath) => path.resolve(process.cwd(), filepath);
+const getExtension = (filepath) => path.extname(filepath);
 const readFile = (filepath) => readFileSync(getFilepath(filepath));
 
 const ast = (file1, file2) => {
-  const entries1 = Object.entries(file1);
-  const entries2 = Object.entries(file2);
-  const entries = _.sortBy([...entries1, ...entries2]);
-  const result = entries.reduce((acc, [key, value]) => {
+  const keys1 = Object.keys(file1);
+  const keys2 = Object.keys(file2);
+  const keys = _.sortBy(_.union(keys1, keys2));
+  const result = keys.reduce((acc, key) => {
     if (_.isObject(file1[key]) && _.isObject(file2[key])) {
-      acc[key] = { type: 'nested', value: ast(file1[key], file2[key]) };
+      acc.push({ type: 'nested', key, children: ast(file1[key], file2[key]) });
     } else if (!Object.hasOwn(file1, key)) {
-      acc[key] = { type: 'added', value };
+      acc.push({ type: 'added', key, value: file2[key] });
     } else if (!Object.hasOwn(file2, key)) {
-      acc[key] = { type: 'removed', value };
+      acc.push({ type: 'removed', key, value: file1[key] });
     } else if (file1[key] !== file2[key]) {
-      acc[key] = { type: 'modified', oldValue: file1[key], newValue: file2[key] };
+      acc.push({
+        type: 'changed', key, oldValue: file1[key], newValue: file2[key]
+      });
     } else {
-      acc[key] = { type: 'unchanged', value };
+      acc.push({ type: 'unchanged', key, value: file1[key] });
     }
     return acc;
-  }, {});
+  }, []);
+  console.log(result);
   return result;
 };
 
-const formatData = (data) => {
-  const entries = Object.entries(data);
-  /* eslint-disable no-param-reassign */
-  const result = entries.reduce((acc, [key, desc]) => {
-    const { type, value } = desc;
-    if (type === 'nested') {
-      acc += `${key}: ` + formatData(value);
-    } else if (type === 'removed') {
-      acc += _.isObject(value) ? `  - ${key}: ` + formatData(value) : `  - ${key}: ${value}\n`;
-//      acc += `  - ${key}: ${value}\n`;
-    } else if (type === 'added') {
-      acc += `  + ${key}: ${value}\n`;
-    } else if (type === 'unchanged') {
-      acc += `   ${key}: ${value}\n`;
-    } else if (type === 'modified') {
-      acc += `  - ${key}: ${desc.oldValue}\n`;
-      acc += `  + ${key}: ${desc.newValue}\n`;
-    }
-    return acc;
-  }, '');
-  /* eslint-enable no-param-reassign */
-  return '{\n' + result + '}\n';
-};
-
-const genDiff = (data1, data2) => {
+const genDiff = (data1, data2, format = 'stylish') => {
   const file1 = readFile(data1);
   const file2 = readFile(data2);
-  const file1Parsed = parse(file1, getFormat(data1));
-  const file2Parsed = parse(file2, getFormat(data2));
-  const nodeTypes = ast(file1Parsed, file2Parsed);
-  //console.log(nodeTypes);
-  //writeFileSync('result2.txt', JSON.stringify(nodeTypes));
-  return formatData(nodeTypes);
+  const file1Parsed = parse(file1, getExtension(data1));
+  const file2Parsed = parse(file2, getExtension(data2));
+  const nodes = ast(file1Parsed, file2Parsed);
+  return getFormat(nodes, format);
 };
 export default genDiff;
