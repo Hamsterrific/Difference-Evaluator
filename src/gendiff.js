@@ -21,14 +21,13 @@ const ast = (file1, file2) => {
       acc.push({ type: 'removed', key, value: file1[key] });
     } else if (file1[key] !== file2[key]) {
       acc.push({
-        type: 'changed', key, oldValue: file1[key], newValue: file2[key]
+        type: 'changed', key, oldValue: file1[key], newValue: file2[key],
       });
     } else {
       acc.push({ type: 'unchanged', key, value: file1[key] });
     }
     return acc;
   }, []);
-  console.log(result);
   return result;
 };
 
