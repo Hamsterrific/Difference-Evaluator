@@ -4,11 +4,14 @@
 [![gendiff](https://github.com/Hamsterrific/frontend-project-46/actions/workflows/main.yml/badge.svg)](https://github.com/Hamsterrific/frontend-project-46/actions/workflows/main.yml)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/1cb825ef7cf49eb41227/test_coverage)](https://codeclimate.com/github/Hamsterrific/frontend-project-46/test_coverage)
 
-Step 3 asciinema:
+Step 3 version:
 [![asciicast](https://asciinema.org/a/nx2opRdcTZcFjcZ9asrf5OKbX.svg)](https://asciinema.org/a/nx2opRdcTZcFjcZ9asrf5OKbX)
 
-Step 6 asciinema:
-[![asciicast](https://asciinema.org/a/P9XqBBB8kzCwtbBlEAItXGIgR.svg)](https://asciinema.org/a/P9XqBBB8kzCwtbBlEAItXGIgR)
+Stylish formatter:
+[![asciicast](https://asciinema.org/a/SUgN2EfX09ce7qjtj5KQBggoL.svg)](https://asciinema.org/a/SUgN2EfX09ce7qjtj5KQBggoL)
 
-Step 7 asciinema:
-[![asciicast](https://asciinema.org/a/NUKcV9Z6XVc2qjXRP01tMSaWw.svg)](https://asciinema.org/a/NUKcV9Z6XVc2qjXRP01tMSaWw)
+Plain formatter:
+[![asciicast](https://asciinema.org/a/Kn8nySZ5pdLIIdvdylO5KrHLn.svg)](https://asciinema.org/a/Kn8nySZ5pdLIIdvdylO5KrHLn)
+
+JSON formatter:
+[![asciicast](https://asciinema.org/a/r1yR79OvvX1RLDPV80smsIceM.svg)](https://asciinema.org/a/r1yR79OvvX1RLDPV80smsIceM)
