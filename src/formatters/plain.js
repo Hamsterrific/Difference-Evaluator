@@ -8,25 +8,24 @@ const stringify = (value) => {
 };
 
 const plain = (data) => {
-  const iter = (item, key = '') => {
-    const keys = [...key, item.key];
+  const iter = (node, path) => node.flatMap((item) => {
+    const newPath = [...path, item.key];
     switch (item.type) {
       case 'nested':
-        return item.children.flatMap((child) => iter(child, keys)).join('\n');
-      case 'removed':
-        return `Property '${keys.join('.')}' was removed`;
+        return iter(item.children, newPath);
       case 'added':
-        return `Property '${keys.join('.')}' was added with value: ${stringify(item.value)}`;
+        return `Property '${newPath.join('.')}' was added with value: ${stringify(item.value)}`;
+      case 'removed':
+        return `Property '${newPath.join('.')}' was removed`;
       case 'changed':
-        return `Property '${keys.join('.')}' was updated. From ${stringify(item.oldValue)} to ${stringify(item.newValue)}`;
+        return `Property '${newPath.join('.')}' was updated. From ${stringify(item.oldValue)} to ${stringify(item.newValue)}`;
       case 'unchanged':
         return [];
       default:
-        throw new Error(`Unknown type ${item.type}`);
+        throw new Error(`Unknown type: ${item.type}`);
     }
-  };
-  const result = data.map((node) => iter(node));
-  return `${result.join('\n')}`;
+  });
+  return `${iter(data, []).join('\n')}`;
 };
 
 export default plain;
