@@ -4,10 +4,10 @@ import parse from './parsers.js';
 import formatData from './formatters/index.js';
 import buildDiffTree from './buildDiffTree.js';
 
-const buildAbsoluteFilepath = (filepath) => path.resolve(process.cwd(), filepath);
+const buildAbsolutePath = (filepath) => path.resolve(process.cwd(), filepath);
 const extractExtension = (filepath) => path.extname(filepath);
 const readFile = (filepath) => {
-  const data = readFileSync(buildAbsoluteFilepath(filepath));
+  const data = readFileSync(buildAbsolutePath(filepath));
   return parse(data, extractExtension(filepath));
 };
 
