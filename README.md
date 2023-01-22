@@ -4,6 +4,23 @@
 [![gendiff](https://github.com/Hamsterrific/frontend-project-46/actions/workflows/main.yml/badge.svg)](https://github.com/Hamsterrific/frontend-project-46/actions/workflows/main.yml)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/1cb825ef7cf49eb41227/test_coverage)](https://codeclimate.com/github/Hamsterrific/frontend-project-46/test_coverage)
 
+## Description
+A program comparing 2 JSON or YAML files and displaying the differences in set format (stylish, JSON, or plain)
+
+## Requirements
+
+Node.js v18.11 or higher
+
+## Installation
+
+### install
+
+```
+npm i
+```
+
+## Asciinema
+
 Step 3 version:
 [![asciicast](https://asciinema.org/a/nx2opRdcTZcFjcZ9asrf5OKbX.svg)](https://asciinema.org/a/nx2opRdcTZcFjcZ9asrf5OKbX)
 
