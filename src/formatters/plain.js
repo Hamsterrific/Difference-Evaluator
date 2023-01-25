@@ -18,7 +18,7 @@ const plain = (data) => {
       case 'removed':
         return `Property '${newPath.join('.')}' was removed`;
       case 'changed':
-        return `Property '${newPath.join('.')}' was updated. From ${stringify(item.oldValue)} to ${stringify(item.newValue)}`;
+        return `Property '${newPath.join('.')}' was updated. From ${stringify(item.value1)} to ${stringify(item.value2)}`;
       case 'unchanged':
         return [];
       default:

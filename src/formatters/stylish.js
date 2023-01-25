@@ -22,7 +22,7 @@ const stylish = (data) => {
         case 'added':
           return `${setIndent(depth)}+ ${item.key}: ${stringify(item.value, depth)}`;
         case 'changed':
-          return `${setIndent(depth)}- ${item.key}: ${stringify(item.oldValue, depth)}\n${setIndent(depth)}+ ${item.key}: ${stringify(item.newValue, depth)}`;
+          return `${setIndent(depth)}- ${item.key}: ${stringify(item.value1, depth)}\n${setIndent(depth)}+ ${item.key}: ${stringify(item.value2, depth)}`;
         case 'unchanged':
           return `${setIndent(depth)}  ${item.key}: ${stringify(item.value, depth)}`;
         default: throw new Error(`Unknown type: ${item.type}`);

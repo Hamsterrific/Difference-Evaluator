@@ -5,10 +5,10 @@ import formatData from './formatters/index.js';
 import buildDiffTree from './buildDiffTree.js';
 
 const buildAbsolutePath = (filepath) => path.resolve(process.cwd(), filepath);
-const extractExtension = (filepath) => path.extname(filepath);
+const extractFormat = (filepath) => path.extname(filepath).slice(1);
 const readFile = (filepath) => {
   const data = readFileSync(buildAbsolutePath(filepath));
-  return parse(data, extractExtension(filepath));
+  return parse(data, extractFormat(filepath));
 };
 
 const genDiff = (filepath1, filepath2, outputFormat = 'stylish') => {
