@@ -1,36 +1,35 @@
 import _ from 'lodash';
 
-const setIndent = (num, str = ' ') => str.repeat(num * 4 - 2);
+const indent = (depth, str = ' ') => str.repeat(depth * 4 - 2);
 
 const stringify = (value, depth = 1) => {
   if (!_.isObject(value)) {
-    return `${value}`;
+    return String(value);
   }
   const keys = Object.keys(value);
-  const result = keys.map((key) => `${setIndent(depth + 1)}  ${key}: ${stringify(value[key], depth + 1)}`);
-  return `{\n${result.join('\n')}\n  ${setIndent(depth)}}`;
+  const result = keys.map((key) => `${indent(depth + 1)}  ${key}: ${stringify(value[key], depth + 1)}`);
+  return `{\n${result.join('\n')}\n  ${indent(depth)}}`;
 };
 
-const stylish = (data) => {
-  const iter = (node, depth = 1) => {
-    const result = node.map((item) => {
-      switch (item.type) {
-        case 'nested':
-          return `${setIndent(depth)}  ${item.key}: {\n${iter(item.children, depth + 1)}\n${setIndent(depth)}  }`;
-        case 'removed':
-          return `${setIndent(depth)}- ${item.key}: ${stringify(item.value, depth)}`;
-        case 'added':
-          return `${setIndent(depth)}+ ${item.key}: ${stringify(item.value, depth)}`;
-        case 'changed':
-          return `${setIndent(depth)}- ${item.key}: ${stringify(item.value1, depth)}\n${setIndent(depth)}+ ${item.key}: ${stringify(item.value2, depth)}`;
-        case 'unchanged':
-          return `${setIndent(depth)}  ${item.key}: ${stringify(item.value, depth)}`;
-        default: throw new Error(`Unknown type: ${item.type}`);
-      }
-    });
-    return result.join('\n');
-  };
-  return `{\n${iter(data)}\n}`;
-};
+const iter = (node, depth = 1) => node.map((item) => {
+  switch (item.type) {
+    case 'nested':
+      return `${indent(depth)}  ${item.key}: {\n${iter(item.children, depth + 1)}\n${indent(depth)}  }`;
+    case 'removed':
+      return `${indent(depth)}- ${item.key}: ${stringify(item.value, depth)}`;
+    case 'added':
+      return `${indent(depth)}+ ${item.key}: ${stringify(item.value, depth)}`;
+    case 'changed': {
+      const output1 = `${indent(depth)}- ${item.key}: ${stringify(item.value1, depth)}`;
+      const output2 = `${indent(depth)}+ ${item.key}: ${stringify(item.value2, depth)}`;
+      return `${output1}\n${output2}`;
+    }
+    case 'unchanged':
+      return `${indent(depth)}  ${item.key}: ${stringify(item.value, depth)}`;
+    default: throw new Error(`Unknown type: ${item.type}`);
+  }
+}).join('\n');
 
-export default stylish;
+const formatStylish = (data) => `{\n${iter(data)}\n}`;
+
+export default formatStylish;

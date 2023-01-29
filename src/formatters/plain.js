@@ -7,7 +7,7 @@ const stringify = (value) => {
   return typeof value === 'string' ? `'${value}'` : value;
 };
 
-const plain = (data) => {
+const formatPlain = (data) => {
   const iter = (node, path) => node.flatMap((item) => {
     const newPath = [...path, item.key];
     switch (item.type) {
@@ -28,4 +28,4 @@ const plain = (data) => {
   return `${iter(data, []).join('\n')}`;
 };
 
-export default plain;
+export default formatPlain;

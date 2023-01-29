@@ -7,11 +7,14 @@ const buildDiffTree = (data1, data2) => {
   return keys.map((key) => {
     if (!Object.hasOwn(data1, key)) {
       return { type: 'added', key, value: data2[key] };
-    } if (!Object.hasOwn(data2, key)) {
+    }
+    if (!Object.hasOwn(data2, key)) {
       return { type: 'removed', key, value: data1[key] };
-    } if (_.isPlainObject(data1[key]) && _.isPlainObject(data2[key])) {
+    }
+    if (_.isPlainObject(data1[key]) && _.isPlainObject(data2[key])) {
       return { type: 'nested', key, children: buildDiffTree(data1[key], data2[key]) };
-    } if (!_.isEqual(data1[key], data2[key])) {
+    }
+    if (!_.isEqual(data1[key], data2[key])) {
       return {
         type: 'changed',
         key,
