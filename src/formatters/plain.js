@@ -4,28 +4,30 @@ const stringify = (value) => {
   if (_.isObject(value)) {
     return '[complex value]';
   }
-  return typeof value === 'string' ? `'${value}'` : value;
+  if (typeof value === 'string') {
+    return `'${value}'`;
+  }
+  return value;
 };
 
-const formatPlain = (data) => {
-  const iter = (node, path) => node.flatMap((item) => {
-    const newPath = [...path, item.key];
-    switch (item.type) {
-      case 'nested':
-        return iter(item.children, newPath);
-      case 'added':
-        return `Property '${newPath.join('.')}' was added with value: ${stringify(item.value)}`;
-      case 'removed':
-        return `Property '${newPath.join('.')}' was removed`;
-      case 'changed':
-        return `Property '${newPath.join('.')}' was updated. From ${stringify(item.value1)} to ${stringify(item.value2)}`;
-      case 'unchanged':
-        return [];
-      default:
-        throw new Error(`Unknown type: ${item.type}`);
-    }
-  });
-  return `${iter(data, []).join('\n')}`;
-};
+const iter = (tree, path) => tree.flatMap((node) => {
+  const propertyName = [...path, node.key];
+  switch (node.type) {
+    case 'nested':
+      return iter(node.children, propertyName);
+    case 'added':
+      return `Property '${propertyName.join('.')}' was added with value: ${stringify(node.value)}`;
+    case 'removed':
+      return `Property '${propertyName.join('.')}' was removed`;
+    case 'changed':
+      return `Property '${propertyName.join('.')}' was updated. From ${stringify(node.value1)} to ${stringify(node.value2)}`;
+    case 'unchanged':
+      return [];
+    default:
+      throw new Error(`Unknown type: ${node.type}`);
+  }
+});
+
+const formatPlain = (data) => `${iter(data, []).join('\n')}`;
 
 export default formatPlain;

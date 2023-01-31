@@ -11,22 +11,22 @@ const stringify = (value, depth = 1) => {
   return `{\n${result.join('\n')}\n  ${indent(depth)}}`;
 };
 
-const iter = (node, depth = 1) => node.map((item) => {
-  switch (item.type) {
+const iter = (tree, depth = 1) => tree.map((node) => {
+  switch (node.type) {
     case 'nested':
-      return `${indent(depth)}  ${item.key}: {\n${iter(item.children, depth + 1)}\n${indent(depth)}  }`;
+      return `${indent(depth)}  ${node.key}: {\n${iter(node.children, depth + 1)}\n${indent(depth)}  }`;
     case 'removed':
-      return `${indent(depth)}- ${item.key}: ${stringify(item.value, depth)}`;
+      return `${indent(depth)}- ${node.key}: ${stringify(node.value, depth)}`;
     case 'added':
-      return `${indent(depth)}+ ${item.key}: ${stringify(item.value, depth)}`;
+      return `${indent(depth)}+ ${node.key}: ${stringify(node.value, depth)}`;
     case 'changed': {
-      const output1 = `${indent(depth)}- ${item.key}: ${stringify(item.value1, depth)}`;
-      const output2 = `${indent(depth)}+ ${item.key}: ${stringify(item.value2, depth)}`;
+      const output1 = `${indent(depth)}- ${node.key}: ${stringify(node.value1, depth)}`;
+      const output2 = `${indent(depth)}+ ${node.key}: ${stringify(node.value2, depth)}`;
       return `${output1}\n${output2}`;
     }
     case 'unchanged':
-      return `${indent(depth)}  ${item.key}: ${stringify(item.value, depth)}`;
-    default: throw new Error(`Unknown type: ${item.type}`);
+      return `${indent(depth)}  ${node.key}: ${stringify(node.value, depth)}`;
+    default: throw new Error(`Unknown type: ${node.type}`);
   }
 }).join('\n');
 
