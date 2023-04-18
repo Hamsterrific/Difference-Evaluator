@@ -5,7 +5,7 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/1cb825ef7cf49eb41227/test_coverage)](https://codeclimate.com/github/Hamsterrific/frontend-project-46/test_coverage)
 
 ## Description
-A program comparing 2 JSON or YAML files and displaying the differences in set format (stylish, JSON, or plain)
+A program comparing 2 JSON or YAML files and displaying the differences in set format (stylish, JSON, or plain). Features Jest tests and GitHub Actions workflow.
 
 ## Requirements
 
